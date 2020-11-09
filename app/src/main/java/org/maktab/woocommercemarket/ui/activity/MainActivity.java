@@ -9,9 +9,8 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.maktab.woocommercemarket.R;
-import org.maktab.woocommercemarket.ui.fragmnet.DashboardFragment;
-import org.maktab.woocommercemarket.ui.fragmnet.HomeFragment;
-import org.maktab.woocommercemarket.ui.fragmnet.NotificationsFragment;
+import org.maktab.woocommercemarket.ui.fragmnet.CategoriesFragment;
+import org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,13 +22,10 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    openFragment(HomeFragment.newInstance());
+                    openFragment(ProductListsFragment.newInstance());
                     return true;
-                case R.id.navigation_dashboard:
-                    openFragment(DashboardFragment.newInstance());
-                    return true;
-                case R.id.navigation_notifications:
-                    openFragment(NotificationsFragment.newInstance());
+                case R.id.navigation_categories:
+                    openFragment(CategoriesFragment.newInstance());
                     return true;
             }
             return false;

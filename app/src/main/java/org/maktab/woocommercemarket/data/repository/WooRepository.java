@@ -59,23 +59,20 @@ public class WooRepository {
 
 
 
-    public void fetchItems(){
-
+    public void fetchNewestItems(){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getNewestOptions());
         Log.d("Tag","response started");
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                Log.d("Tag","success");
+                mListNewest.setValue(response.body());
+                Log.d("Tag","success newest");
             }
-
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("Tag","fail");
-
+                Log.d("Tag","fail newest");
             }
         });
-
     }
 
 
