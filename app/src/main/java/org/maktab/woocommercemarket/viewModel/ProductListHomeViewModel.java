@@ -2,6 +2,7 @@ package org.maktab.woocommercemarket.viewModel;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -31,9 +32,6 @@ public class ProductListHomeViewModel extends ViewModel {
         mLiveDataProductTopSale = mRepository.getLiveDataList(ListsType.TOP_SALE);
     }
 
-
-
-
     public List<Product> getListProducts(ListsType listsType) {
         switch (listsType) {
             case NEWEST:
@@ -45,7 +43,6 @@ public class ProductListHomeViewModel extends ViewModel {
         }
         return null;
     }
-
 
     public LiveData<List<Product>> getLiveDataProductLists(ListsType listsType) {
         switch (listsType) {
@@ -60,25 +57,29 @@ public class ProductListHomeViewModel extends ViewModel {
     }
 
     public Product getProductByPosition(int position,ListsType listsType){
-        switch (listsType) {
-            case NEWEST:
-                return mLiveDataProductNewest.getValue().get(position);
-            case TOP_SALE:
-                return mLiveDataProductTopSale.getValue().get(position);
-            case MOST_POINTS:
-                return mLiveDataProductMostPoints.getValue().get(position);
+        try {
+            switch (listsType) {
+                case NEWEST:
+                    return mLiveDataProductNewest.getValue().get(position);
+                case TOP_SALE:
+                    return mLiveDataProductTopSale.getValue().get(position);
+                case MOST_POINTS:
+                    return mLiveDataProductMostPoints.getValue().get(position);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            return Product.getLoadingInstance();
         }
         return null;
-
     }
 
-
-    public void setLiveDataValue(List<Product> products, ListsType newest) {
-        mRepository.setLiveDataValue(products,newest);
-    }
 
 
     public void fetchNewestItems(){
+        Log.d("Tag","fetchnewest Items on viewmodel");
         mRepository.fetchNewestItems();
+    }
+
+    public void notifyNewestItemChange() {
+
     }
 }

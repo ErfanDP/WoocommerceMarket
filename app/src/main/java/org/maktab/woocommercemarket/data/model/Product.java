@@ -3,21 +3,32 @@ package org.maktab.woocommercemarket.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Product {
+    @SerializedName("id")
+    @Expose
+    private int mId;
     @SerializedName("name")
     @Expose
     private String mName;
     @SerializedName("price")
     @Expose
     private String mPrice;
-//    @SerializedName("price")
-//    @Expose
-//    private Uri mURLPicture;
+    @SerializedName("description")
+    @Expose
+    private String mDescription;
+    @SerializedName("images")
+    @Expose
+    private List<ProductImage> mImages;
 
-    public Product(String name, String price) {
+    public Product(int id, String name, String price, String description, List<ProductImage> images) {
+        mId = id;
         mName = name;
         mPrice = price;
-//        mURLPicture = urlPicture;
+        mDescription = description;
+        mImages = images;
     }
 
     public String getName() {
@@ -36,11 +47,40 @@ public class Product {
         mPrice = price;
     }
 
-//    public Uri getURLPicture() {
-//        return mURLPicture;
-//    }
-//
-//    public void setURLPicture(Uri URLPicture) {
-//        mURLPicture = URLPicture;
-//    }
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String description) {
+        mDescription = description;
+    }
+
+    public List<ProductImage> getImages() {
+        return mImages;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        mImages = images;
+    }
+
+    public static Product getLoadingInstance() {
+        List<ProductImage> productImages = new ArrayList<>();
+        return new Product(0,"loading","loading","Loading",productImages);
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "mName='" + mName + '\'' +
+                ", mPrice='" + mPrice + '\'' +
+                '}';
+    }
 }

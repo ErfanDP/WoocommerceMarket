@@ -8,12 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import org.maktab.woocommercemarket.R;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.databinding.ListHomeProductBinding;
 import org.maktab.woocommercemarket.viewModel.ProductListHomeViewModel;
 
-public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ProductHolder>{
+public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ProductHolder> {
     private ProductListHomeViewModel mViewModel;
     private ListsType mListsType;
     private Context mContext;
@@ -26,7 +28,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.Produc
 
     @Override
     public int getItemCount() {
-        return 10;
+        return mViewModel.getListProducts(mListsType).size();
     }
 
     @NonNull
@@ -60,10 +62,12 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.Produc
 
         public void bindPhoto(int position) {
             mListHomeProductBinding.setPosition(position);
-//            Picasso.get()
-//                    .load(mViewModel.getList(mListType).getValue().getURLPicture())
-//                    .placeholder(R.drawable.ic_product)
-//                    .into(mListHomeProductBinding.productImage);
+            Glide
+                    .with(mContext)
+                    .load(mViewModel.getProductByPosition(position,mListsType).getImages().get(0).getSrc())
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_product_place_holder)
+                    .into(mListHomeProductBinding.productImage);
         }
     }
 }
