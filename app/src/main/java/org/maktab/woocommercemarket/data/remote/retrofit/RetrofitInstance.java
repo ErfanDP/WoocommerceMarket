@@ -1,4 +1,6 @@
-package org.maktab.woocommercemarket.data.remote;
+package org.maktab.woocommercemarket.data.remote.retrofit;
+
+import org.maktab.woocommercemarket.data.remote.NetworkParams;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

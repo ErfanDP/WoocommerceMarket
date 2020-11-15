@@ -20,10 +20,10 @@ import java.util.List;
 public class ProductListHomeViewModel extends ViewModel {
 
 
-    private WooRepository mRepository;
-    private LiveData<List<Product>> mLiveDataProductNewest;
-    private LiveData<List<Product>> mLiveDataProductTopSale;
-    private LiveData<List<Product>> mLiveDataProductMostPoints;
+    private final WooRepository mRepository;
+    private final LiveData<List<Product>> mLiveDataProductNewest;
+    private final LiveData<List<Product>> mLiveDataProductTopSale;
+    private final LiveData<List<Product>> mLiveDataProductMostPoints;
 
     public ProductListHomeViewModel() {
         mRepository = WooRepository.getInstance();
@@ -74,12 +74,12 @@ public class ProductListHomeViewModel extends ViewModel {
 
 
 
-    public void fetchNewestItems(){
-        Log.d("Tag","fetchnewest Items on viewmodel");
-        mRepository.fetchNewestItems();
+    public void fetchItems(){
+        Log.d("Tag","fetch Items on viewmodel");
+        mRepository.fetchHomeItems();
     }
 
-    public void notifyNewestItemChange() {
 
-    }
+
+
 }

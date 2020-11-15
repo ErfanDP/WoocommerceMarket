@@ -3,10 +3,11 @@ package org.maktab.woocommercemarket.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Product {
+public class Product implements Serializable {
     @SerializedName("id")
     @Expose
     private int mId;
@@ -21,9 +22,9 @@ public class Product {
     private String mDescription;
     @SerializedName("images")
     @Expose
-    private List<ProductImage> mImages;
+    private List<Image> mImages;
 
-    public Product(int id, String name, String price, String description, List<ProductImage> images) {
+    public Product(int id, String name, String price, String description, List<Image> images) {
         mId = id;
         mName = name;
         mPrice = price;
@@ -63,17 +64,17 @@ public class Product {
         mDescription = description;
     }
 
-    public List<ProductImage> getImages() {
+    public List<Image> getImages() {
         return mImages;
     }
 
-    public void setImages(List<ProductImage> images) {
+    public void setImages(List<Image> images) {
         mImages = images;
     }
 
     public static Product getLoadingInstance() {
-        List<ProductImage> productImages = new ArrayList<>();
-        return new Product(0,"loading","loading","Loading",productImages);
+        List<Image> images = new ArrayList<>();
+        return new Product(0,"loading","loading","Loading", images);
     }
 
     @Override

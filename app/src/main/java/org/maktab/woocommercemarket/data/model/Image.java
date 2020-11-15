@@ -3,7 +3,9 @@ package org.maktab.woocommercemarket.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProductImage {
+import java.io.Serializable;
+
+public class Image implements Serializable {
     @SerializedName("id")
     @Expose
     private int mId;
@@ -14,7 +16,7 @@ public class ProductImage {
     @Expose
     private String mName;
 
-    public ProductImage(int id, String src, String name) {
+    public Image(int id, String src, String name) {
         mId = id;
         mSrc = src;
         mName = name;

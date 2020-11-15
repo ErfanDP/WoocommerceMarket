@@ -2,6 +2,7 @@ package org.maktab.woocommercemarket.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,15 +13,22 @@ import com.bumptech.glide.Glide;
 
 import org.maktab.woocommercemarket.R;
 import org.maktab.woocommercemarket.data.model.ListsType;
+import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.databinding.ListHomeProductBinding;
 import org.maktab.woocommercemarket.viewModel.ProductListHomeViewModel;
 
 public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.ProductHolder> {
+
     private ProductListHomeViewModel mViewModel;
     private ListsType mListsType;
     private Context mContext;
+    private AdapterCallBacks mAdapterCallBacks;
 
-    public HomeListAdapter(ProductListHomeViewModel viewModel, ListsType listsType, Context context) {
+    public HomeListAdapter(AdapterCallBacks adapterCallBacks
+            ,ProductListHomeViewModel viewModel
+            , ListsType listsType
+            , Context context) {
+        mAdapterCallBacks = adapterCallBacks;
         mViewModel = viewModel;
         mListsType = listsType;
         mContext = context;
@@ -58,16 +66,24 @@ public class HomeListAdapter extends RecyclerView.Adapter<HomeListAdapter.Produc
             mListHomeProductBinding = listHomeProductsBinding;
             mListHomeProductBinding.setViewModel(mViewModel);
             mListHomeProductBinding.setListType(mListsType);
+
         }
 
         public void bindPhoto(int position) {
             mListHomeProductBinding.setPosition(position);
+            mListHomeProductBinding.getRoot().setOnClickListener(v -> {
+                mAdapterCallBacks.onHolderClick(mViewModel.getProductByPosition(position,mListsType));
+            });
             Glide
                     .with(mContext)
                     .load(mViewModel.getProductByPosition(position,mListsType).getImages().get(0).getSrc())
-                    .centerCrop()
+                    .circleCrop()
                     .placeholder(R.drawable.ic_product_place_holder)
                     .into(mListHomeProductBinding.productImage);
         }
+    }
+
+    public interface AdapterCallBacks{
+        void onHolderClick(Product product);
     }
 }

@@ -8,10 +8,9 @@ import androidx.lifecycle.MutableLiveData;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.data.remote.NetworkParams;
-import org.maktab.woocommercemarket.data.remote.RetrofitInstance;
-import org.maktab.woocommercemarket.data.remote.WooServiceRetrofit;
+import org.maktab.woocommercemarket.data.remote.retrofit.RetrofitInstance;
+import org.maktab.woocommercemarket.data.remote.retrofit.WooServiceRetrofit;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +59,48 @@ public class WooRepository {
     }
 
 
+    public void fetchHomeItems(){
+        fetchNewestItems();
+        fetchMostPointItems();
+        fetchTopSales();
+    }
+
+
+    public void fetchMostPointItems(){
+        Call<List<Product>> call = mWooService.listItems(NetworkParams.getMostPointsOptions());
+        Log.d("Tag","response Most point started");
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if(response.isSuccessful()) {
+                    mListMostPoints.setValue(response.body());
+                    Log.d("Tag", "success Most point set value "+response.body().get(0).toString());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("Tag","fail Most point");
+            }
+        });
+    }
+
+    public void fetchTopSales(){
+        Call<List<Product>> call = mWooService.listItems(NetworkParams.getPopularOptions());
+        Log.d("Tag","response top sale started");
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if(response.isSuccessful()) {
+                    mListTopSales.setValue(response.body());
+                    Log.d("Tag", "success top sale set value "+response.body().get(0).toString());
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.d("Tag","fail top sales");
+            }
+        });
+    }
 
     public void fetchNewestItems(){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getNewestOptions());
@@ -99,17 +140,17 @@ public class WooRepository {
         return null;
     }
 
-
-    public void setLiveDataValue(List<Product> products, ListsType listsType) {
-        Log.d("Tag","set Live data value on Repository");
-
-        switch (listsType) {
-            case MOST_POINTS:
-                mListMostPoints.setValue(products);
-            case TOP_SALE:
-                mListTopSales.setValue(products);
-            case NEWEST:
-                mListNewest.setValue(products);
-        }
-    }
+//
+//    public void setLiveDataValue(List<Product> products, ListsType listsType) {
+//        Log.d("Tag","set Live data value on Repository");
+//
+//        switch (listsType) {
+//            case MOST_POINTS:
+//                mListMostPoints.setValue(products);
+//            case TOP_SALE:
+//                mListTopSales.setValue(products);
+//            case NEWEST:
+//                mListNewest.setValue(products);
+//        }
+//    }
 }

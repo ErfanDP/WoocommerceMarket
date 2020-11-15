@@ -1,5 +1,6 @@
-package org.maktab.woocommercemarket.data.remote;
+package org.maktab.woocommercemarket.data.remote.retrofit;
 
+import org.maktab.woocommercemarket.data.model.Category;
 import org.maktab.woocommercemarket.data.model.Product;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface WooServiceRetrofit {
 
     @GET("products/{id}")
     Call<Product> getItem(@Path("id")int id, @QueryMap Map<String, String> options);
+
+    @GET("products/categories")
+    Call<List<Product>> listCategories(@QueryMap Map<String, String> options);
 }

@@ -9,11 +9,13 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.maktab.woocommercemarket.R;
+import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.data.repository.WooRepository;
 import org.maktab.woocommercemarket.ui.fragmnet.CategoriesFragment;
+import org.maktab.woocommercemarket.ui.fragmnet.ProductInfoFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ProductListsFragment.FragmentCallBacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,4 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    @Override
+    public void onHolderClick(Product product) {
+        openFragment(ProductInfoFragment.newInstance(product));
+    }
 }

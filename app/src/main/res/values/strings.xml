@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">WoocommerceMarket</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Categories</string>
+    <string name="title_categories">Categories</string>
+    <string name="newest_products">Newest Products</string>
+    <string name="more">More</string>
+
+    <string name="name">Name :</string>
+    <string name="description">Description :</string>
+    <string name="price">Price :</string>
+    <string name="product_image">Product Image</string>
+    <string name="top_sales">Top Sales</string>
+    <string name="mostpoints">MostPoints</string>
 
 </resources>

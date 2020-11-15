@@ -1,5 +1,6 @@
 package org.maktab.woocommercemarket.ui.fragmnet;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -18,18 +18,14 @@ import org.maktab.woocommercemarket.R;
 import org.maktab.woocommercemarket.adapters.HomeListAdapter;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
-import org.maktab.woocommercemarket.data.repository.WooRepository;
 import org.maktab.woocommercemarket.databinding.FragmentProductListsBinding;
-import org.maktab.woocommercemarket.ui.observer.SingleEventObserver;
 import org.maktab.woocommercemarket.viewModel.ProductListHomeViewModel;
-
-import java.util.List;
 
 public class ProductListsFragment extends Fragment {
 
     private ProductListHomeViewModel mViewModel;
     private FragmentProductListsBinding mBinding;
-
+    private FragmentCallBacks mFragmentCallBacks;
 
     public static ProductListsFragment newInstance() {
         Bundle args = new Bundle();
@@ -42,7 +38,13 @@ public class ProductListsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProductListHomeViewModel.class);
-        mViewModel.fetchNewestItems();
+        mViewModel.fetchItems();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mFragmentCallBacks = (FragmentCallBacks) context;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -66,17 +68,29 @@ public class ProductListsFragment extends Fragment {
                     Log.d("Tag","observer newest on fragment");
                     mBinding.homeTopNewest.setAdapter(getListAdapter(ListsType.NEWEST));
                 });
+        mViewModel.getLiveDataProductLists(ListsType.MOST_POINTS).observe(getViewLifecycleOwner()
+                , products -> {
+                    Log.d("Tag","observer MostPoints on fragment");
+                    mBinding.homeMostPoints.setAdapter(getListAdapter(ListsType.MOST_POINTS));
+                });
+        mViewModel.getLiveDataProductLists(ListsType.TOP_SALE).observe(getViewLifecycleOwner()
+                , products -> {
+                    Log.d("Tag","observer TopSale on fragment");
+                    mBinding.homeTopSales.setAdapter(getListAdapter(ListsType.TOP_SALE));
+                });
+
     }
 
-
     public HomeListAdapter getListAdapter(ListsType listsType) {
+        HomeListAdapter.AdapterCallBacks adapterCallBacks =
+                product -> mFragmentCallBacks.onHolderClick(product);
         switch (listsType) {
             case NEWEST:
-                return new HomeListAdapter(mViewModel, ListsType.NEWEST,getContext());
+                return new HomeListAdapter(adapterCallBacks,mViewModel, ListsType.NEWEST,getContext());
             case TOP_SALE:
-                return new HomeListAdapter(mViewModel, ListsType.TOP_SALE,getContext());
+                return new HomeListAdapter(adapterCallBacks,mViewModel, ListsType.TOP_SALE,getContext());
             case MOST_POINTS:
-                return new HomeListAdapter(mViewModel, ListsType.MOST_POINTS,getContext());
+                return new HomeListAdapter(adapterCallBacks,mViewModel, ListsType.MOST_POINTS,getContext());
         }
         return null;
     }
@@ -88,6 +102,19 @@ public class ProductListsFragment extends Fragment {
                 .setLayoutManager(new LinearLayoutManager(getContext()
                         ,LinearLayoutManager.HORIZONTAL
                         ,false));
+        mBinding.homeMostPoints
+                .setLayoutManager(new LinearLayoutManager(getContext()
+                        ,LinearLayoutManager.HORIZONTAL
+                        ,false));
+        mBinding.homeTopSales
+                .setLayoutManager(new LinearLayoutManager(getContext()
+                        ,LinearLayoutManager.HORIZONTAL
+                        ,false));
 
+
+    }
+
+    public interface FragmentCallBacks{
+        void onHolderClick(Product product);
     }
 }
