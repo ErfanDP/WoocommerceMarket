@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import org.jetbrains.annotations.NotNull;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.data.remote.NetworkParams;
@@ -13,6 +14,7 @@ import org.maktab.woocommercemarket.data.remote.retrofit.WooServiceRetrofit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,10 +24,11 @@ import retrofit2.Retrofit;
 public class WooRepository {
 
     private static WooRepository mRepository;
-    private WooServiceRetrofit mWooService;
-    private MutableLiveData<List<Product>> mListNewest = new MutableLiveData<>();
-    private MutableLiveData<List<Product>> mListTopSales = new MutableLiveData<>();
-    private MutableLiveData<List<Product>> mListMostPoints = new MutableLiveData<>();
+    private final WooServiceRetrofit mWooService;
+    private final MutableLiveData<List<Product>> mListNewest = new MutableLiveData<>();
+    private final MutableLiveData<List<Product>> mListTopSales = new MutableLiveData<>();
+    private final MutableLiveData<List<Product>> mListMostPoints = new MutableLiveData<>();
+    private boolean mItemFetched =false;
 
 
     public WooRepository() {
@@ -60,97 +63,84 @@ public class WooRepository {
 
 
     public void fetchHomeItems(){
-        fetchNewestItems();
-        fetchMostPointItems();
-        fetchTopSales();
+        if(!mItemFetched) {
+            fetchNewestItems();
+            fetchMostPointItems();
+            fetchTopSales();
+            mItemFetched = true;
+        }
     }
 
 
     public void fetchMostPointItems(){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getMostPointsOptions());
-        Log.d("Tag","response Most point started");
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if(response.isSuccessful()) {
-                    mListMostPoints.setValue(response.body());
-                    Log.d("Tag", "success Most point set value "+response.body().get(0).toString());
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("Tag","fail Most point");
-            }
-        });
+        startRespondEnqueue(mListMostPoints,call);
+    }
+
+    public void fetchMostPointItems(MutableLiveData<List<Product>> liveData,int page){
+        Call<List<Product>> call = mWooService.listItems(NetworkParams.getMostPointsOptions(page));
+        startRespondEnqueue(liveData, call);
     }
 
     public void fetchTopSales(){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getPopularOptions());
-        Log.d("Tag","response top sale started");
-        call.enqueue(new Callback<List<Product>>() {
-            @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                if(response.isSuccessful()) {
-                    mListTopSales.setValue(response.body());
-                    Log.d("Tag", "success top sale set value "+response.body().get(0).toString());
-                }
-            }
-            @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("Tag","fail top sales");
-            }
-        });
+        startRespondEnqueue(mListTopSales,call);
+    }
+    public void fetchTopSales(MutableLiveData<List<Product>> liveData,int page){
+        Call<List<Product>> call = mWooService.listItems(NetworkParams.getPopularOptions(page));
+        startRespondEnqueue(liveData, call);
     }
 
     public void fetchNewestItems(){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getNewestOptions());
+        startRespondEnqueue(mListNewest,call);
+    }
+    public void fetchNewestItems(MutableLiveData<List<Product>> liveData,int page){
+        Call<List<Product>> call = mWooService.listItems(NetworkParams.getNewestOptions(page));
+        startRespondEnqueue(liveData, call);
+    }
+
+    private void startRespondEnqueue(MutableLiveData<List<Product>> liveData, Call<List<Product>> call) {
         Log.d("Tag","response started");
         call.enqueue(new Callback<List<Product>>() {
             @Override
-            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+            public void onResponse(@NotNull Call<List<Product>> call, @NotNull Response<List<Product>> response) {
                 if(response.isSuccessful()) {
-                    mListNewest.setValue(response.body());
-                    Log.d("Tag", "success newest set value "+response.body().get(0).toString());
+                    if(Objects.requireNonNull(response.body()).size() > 0) {
+                        Log.d("Tag", "success set value " + response.body().get(0).toString());
+                        List<Product> list = liveData.getValue();
+                        Objects.requireNonNull(list).addAll(response.body());
+                        liveData.setValue(list);
+                    }
                 }
             }
             @Override
-            public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("Tag","fail newest");
+            public void onFailure(@NotNull Call<List<Product>> call, @NotNull Throwable t) {
+                Log.d("Tag","fail");
             }
         });
     }
 
-    public LiveData<Product> getItem(int id){
-        Call<Product> call = mWooService.getItem(id,NetworkParams.BASE_OPTIONS);
-        MutableLiveData<Product> productMutableLiveData = new MutableLiveData<>();
-        productMutableLiveData.setValue(Product.getLoadingInstance());
-        Log.d("Tag","response get item started");
-        call.enqueue(new Callback<Product>() {
-            @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                productMutableLiveData.setValue(response.body());
-                Log.d("Tag","response get item successful");
-            }
-
-            @Override
-            public void onFailure(Call<Product> call, Throwable t) {
-                Log.d("Tag","response get item failed");
-            }
-        });
-        return null;
-    }
-
+//    public LiveData<Product> getItem(int id){
+//        Call<Product> call = mWooService.getItem(id,NetworkParams.BASE_OPTIONS);
+//        MutableLiveData<Product> productMutableLiveData = new MutableLiveData<>();
+//        productMutableLiveData.setValue(Product.getLoadingInstance());
+//        Log.d("Tag","response get item started");
+//        call.enqueue(new Callback<Product>() {
+//            @Override
+//            public void onResponse(@NotNull Call<Product> call, @NotNull Response<Product> response) {
+//                productMutableLiveData.setValue(response.body());
+//                Log.d("Tag","response get item successful");
+//            }
 //
-//    public void setLiveDataValue(List<Product> products, ListsType listsType) {
-//        Log.d("Tag","set Live data value on Repository");
-//
-//        switch (listsType) {
-//            case MOST_POINTS:
-//                mListMostPoints.setValue(products);
-//            case TOP_SALE:
-//                mListTopSales.setValue(products);
-//            case NEWEST:
-//                mListNewest.setValue(products);
-//        }
+//            @Override
+//            public void onFailure(@NotNull Call<Product> call, @NotNull Throwable t) {
+//                Log.d("Tag","response get item failed");
+//            }
+//        });
+//        return null;
 //    }
+
+
+
 }

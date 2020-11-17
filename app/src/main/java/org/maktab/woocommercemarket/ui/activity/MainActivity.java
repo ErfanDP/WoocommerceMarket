@@ -9,13 +9,16 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.maktab.woocommercemarket.R;
+import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.data.repository.WooRepository;
 import org.maktab.woocommercemarket.ui.fragmnet.CategoriesFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductInfoFragment;
+import org.maktab.woocommercemarket.ui.fragmnet.ProductListMoreFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragment;
 
-public class MainActivity extends AppCompatActivity implements ProductListsFragment.FragmentCallBacks {
+public class MainActivity extends AppCompatActivity implements ProductListsFragment.FragmentCallBacks
+, ProductListMoreFragment.FragmentMoreCallBacks {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +39,36 @@ public class MainActivity extends AppCompatActivity implements ProductListsFragm
         });
 
 
+        navView.setOnNavigationItemReselectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                case R.id.navigation_categories:
+            }
+        });
+
+
 
     }
-    public void openFragment(Fragment fragment) {
+    public <T extends Fragment> void openFragment(T fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.nav_container_fragment,fragment)
-                .commit();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.nav_container_fragment,fragment)
+                    .commit();
     }
+
 
     @Override
     public void onHolderClick(Product product) {
+        openFragment(ProductInfoFragment.newInstance(product));
+    }
+
+    @Override
+    public void onMoreClick(ListsType listsType) {
+        openFragment(ProductListMoreFragment.newInstance(listsType));
+    }
+
+    @Override
+    public void onHolderMoreClick(Product product) {
         openFragment(ProductInfoFragment.newInstance(product));
     }
 }

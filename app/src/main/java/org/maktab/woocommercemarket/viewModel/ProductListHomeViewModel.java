@@ -1,24 +1,17 @@
 package org.maktab.woocommercemarket.viewModel;
 
-import android.app.Application;
-import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import org.maktab.woocommercemarket.adapters.HomeListAdapter;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.data.repository.WooRepository;
 
 import java.util.List;
 
-public class ProductListHomeViewModel extends ViewModel {
-
+public class ProductListHomeViewModel extends ProductListViewModel {
 
     private final WooRepository mRepository;
     private final LiveData<List<Product>> mLiveDataProductNewest;
@@ -32,6 +25,7 @@ public class ProductListHomeViewModel extends ViewModel {
         mLiveDataProductTopSale = mRepository.getLiveDataList(ListsType.TOP_SALE);
     }
 
+    @Override
     public List<Product> getListProducts(ListsType listsType) {
         switch (listsType) {
             case NEWEST:
@@ -55,7 +49,7 @@ public class ProductListHomeViewModel extends ViewModel {
         }
         return null;
     }
-
+    @Override
     public Product getProductByPosition(int position,ListsType listsType){
         try {
             switch (listsType) {
@@ -78,8 +72,6 @@ public class ProductListHomeViewModel extends ViewModel {
         Log.d("Tag","fetch Items on viewmodel");
         mRepository.fetchHomeItems();
     }
-
-
 
 
 }

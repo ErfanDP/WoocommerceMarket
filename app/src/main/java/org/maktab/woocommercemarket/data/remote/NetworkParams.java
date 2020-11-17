@@ -23,22 +23,42 @@ public class NetworkParams {
         map.put("orderby", DATE_PROPERTIES);
         return map;
     }
-
-    public static Map<String, String> getSpecialOptions() {
+    public static Map<String, String> getNewestOptions(int page) {
         Map<String, String> map = new HashMap<>(BASE_OPTIONS);
-        map.put("tag", SPECIAL_TAG);
+        map.put("orderby", DATE_PROPERTIES);
+        map.put("page", String.valueOf(page));
         return map;
     }
+
 
     public static Map<String, String> getPopularOptions() {
         Map<String, String> map = new HashMap<>(BASE_OPTIONS);
         map.put("orderby", POPULARITY_PROPERTIES);
         return map;
     }
+    public static Map<String, String> getPopularOptions(int page) {
+        Map<String, String> map = new HashMap<>(BASE_OPTIONS);
+        map.put("orderby", POPULARITY_PROPERTIES);
+        map.put("page", String.valueOf(page));
+        return map;
+    }
 
     public static Map<String, String> getMostPointsOptions() {
         Map<String, String> map = new HashMap<>(BASE_OPTIONS);
         map.put("orderby", RATING_PROPERTIES);
+        return map;
+    }
+    public static Map<String, String> getMostPointsOptions(int page) {
+        Map<String, String> map = new HashMap<>(BASE_OPTIONS);
+        map.put("orderby", RATING_PROPERTIES);
+        map.put("page", String.valueOf(page));
+        return map;
+    }
+
+
+    public static Map<String, String> getSpecialOptions() {
+        Map<String, String> map = new HashMap<>(BASE_OPTIONS);
+        map.put("tag", SPECIAL_TAG);
         return map;
     }
 

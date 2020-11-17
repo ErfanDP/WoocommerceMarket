@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.maktab.woocommercemarket.R;
-import org.maktab.woocommercemarket.adapters.HomeListAdapter;
+import org.maktab.woocommercemarket.adapters.ProductListAdapter;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.databinding.FragmentProductListsBinding;
@@ -56,9 +56,15 @@ public class ProductListsFragment extends Fragment {
 
         registerObservers();
         initRecyclerViews();
+        listeners();
         return mBinding.getRoot();
     }
 
+    private void listeners() {
+        mBinding.buttonMoreMostPoints.setOnClickListener(v -> mFragmentCallBacks.onMoreClick(ListsType.MOST_POINTS));
+        mBinding.buttonMoreNewest.setOnClickListener(v -> mFragmentCallBacks.onMoreClick(ListsType.NEWEST));
+        mBinding.buttonMoreTopSales.setOnClickListener(v -> mFragmentCallBacks.onMoreClick(ListsType.TOP_SALE));
+    }
 
 
     private void registerObservers() {
@@ -81,16 +87,28 @@ public class ProductListsFragment extends Fragment {
 
     }
 
-    public HomeListAdapter getListAdapter(ListsType listsType) {
-        HomeListAdapter.AdapterCallBacks adapterCallBacks =
+    public ProductListAdapter getListAdapter(ListsType listsType) {
+        ProductListAdapter.AdapterCallBacks adapterCallBacks =
                 product -> mFragmentCallBacks.onHolderClick(product);
         switch (listsType) {
             case NEWEST:
-                return new HomeListAdapter(adapterCallBacks,mViewModel, ListsType.NEWEST,getContext());
+                return new ProductListAdapter(adapterCallBacks
+                        ,mViewModel
+                        , ListsType.NEWEST
+                        ,getContext()
+                        ,true);
             case TOP_SALE:
-                return new HomeListAdapter(adapterCallBacks,mViewModel, ListsType.TOP_SALE,getContext());
+                return new ProductListAdapter(adapterCallBacks
+                        ,mViewModel
+                        , ListsType.TOP_SALE
+                        ,getContext()
+                        ,true);
             case MOST_POINTS:
-                return new HomeListAdapter(adapterCallBacks,mViewModel, ListsType.MOST_POINTS,getContext());
+                return new ProductListAdapter(adapterCallBacks
+                        ,mViewModel
+                        , ListsType.MOST_POINTS
+                        ,getContext()
+                        ,true);
         }
         return null;
     }
@@ -111,10 +129,10 @@ public class ProductListsFragment extends Fragment {
                         ,LinearLayoutManager.HORIZONTAL
                         ,false));
 
-
     }
 
     public interface FragmentCallBacks{
         void onHolderClick(Product product);
+        void onMoreClick(ListsType listsType);
     }
 }
