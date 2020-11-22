@@ -14,4 +14,6 @@ public abstract class ProductListViewModel extends ViewModel {
     public abstract Product getProductByPosition(int position, ListsType listsType);
 
 
+
+
 }

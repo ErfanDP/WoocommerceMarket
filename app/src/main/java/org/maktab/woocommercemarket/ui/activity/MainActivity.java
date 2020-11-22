@@ -1,74 +1,70 @@
 package org.maktab.woocommercemarket.ui.activity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.navigation.ActivityNavigator;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.maktab.woocommercemarket.R;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
-import org.maktab.woocommercemarket.data.repository.WooRepository;
 import org.maktab.woocommercemarket.ui.fragmnet.CategoriesFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductInfoFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListMoreFragment;
+import org.maktab.woocommercemarket.ui.fragmnet.ProductListMoreFragmentDirections;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragment;
+import org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragmentDirections;
 
 public class MainActivity extends AppCompatActivity implements ProductListsFragment.FragmentCallBacks
-, ProductListMoreFragment.FragmentMoreCallBacks {
+        , ProductListMoreFragment.FragmentMoreCallBacks {
+    private NavController mNavController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        openFragment(ProductListsFragment.newInstance());
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    openFragment(ProductListsFragment.newInstance());
-                    return true;
-                case R.id.navigation_categories:
-                    openFragment(CategoriesFragment.newInstance());
-                    return true;
-            }
-            return false;
-        });
-
-
-        navView.setOnNavigationItemReselectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                case R.id.navigation_categories:
-            }
-        });
-
-
-
+        navigationInit();
     }
-    public <T extends Fragment> void openFragment(T fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.nav_container_fragment,fragment)
-                    .commit();
+
+    private void navigationInit() {
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_container_fragment);
+        mNavController =  navHostFragment.getNavController();
+        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_nav_view);
+        NavigationUI.setupWithNavController(bottomNavigationView,navHostFragment.getNavController());
+        bottomNavigationView.setOnNavigationItemReselectedListener(item -> {});
     }
 
 
     @Override
     public void onHolderClick(Product product) {
-        openFragment(ProductInfoFragment.newInstance(product));
+        NavDirections action = ProductListsFragmentDirections
+                        .actionProductListsFragmentToProductInfoFragment(product);
+        mNavController.navigate(action);
     }
 
     @Override
     public void onMoreClick(ListsType listsType) {
-        openFragment(ProductListMoreFragment.newInstance(listsType));
+        NavDirections action = ProductListsFragmentDirections.
+                actionProductListsFragmentToProductListMoreFragment(listsType);
+        mNavController.navigate(action);
     }
 
     @Override
     public void onHolderMoreClick(Product product) {
-        openFragment(ProductInfoFragment.newInstance(product));
+        NavDirections action = ProductListMoreFragmentDirections
+                .actionProductListMoreFragmentToProductInfoFragment(product);
+        mNavController.navigate(action);
     }
 }

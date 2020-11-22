@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/productListsFragment">
+
+    <fragment
+        android:id="@+id/productListsFragment"
+        android:name="org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragment"
+        android:label="ProductListsFragment" >
+        <action
+            android:id="@+id/action_productListsFragment_to_productInfoFragment"
+            app:destination="@id/productInfoFragment" />
+        <action
+            android:id="@+id/action_productListsFragment_to_productListMoreFragment"
+            app:destination="@id/productListMoreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productInfoFragment"
+        android:name="org.maktab.woocommercemarket.ui.fragmnet.ProductInfoFragment"
+        android:label="fragment_product_info"
+        tools:layout="@layout/fragment_product_info" >
+        <argument
+            android:name="product_arg"
+            app:argType="org.maktab.woocommercemarket.data.model.Product" />
+    </fragment>
+    <fragment
+        android:id="@+id/productListMoreFragment"
+        android:name="org.maktab.woocommercemarket.ui.fragmnet.ProductListMoreFragment"
+        android:label="ProductListMoreFragment" >
+        <action
+            android:id="@+id/action_productListMoreFragment_to_productInfoFragment"
+            app:destination="@id/productInfoFragment" />
+        <argument
+            android:name="arg_list_type"
+            app:argType="org.maktab.woocommercemarket.data.model.ListsType" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="org.maktab.woocommercemarket.ui.fragmnet.CategoriesFragment"
+        android:label="categories_fragment"
+        tools:layout="@layout/categories_fragment" >
+        <action
+            android:id="@+id/action_categoriesFragment_to_productInfoFragment"
+            app:destination="@id/productInfoFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_productListsFragment"
+        app:destination="@id/productListsFragment" />
+    <action
+        android:id="@+id/action_global_categoriesFragment"
+        app:destination="@id/categoriesFragment" />
+</navigation>

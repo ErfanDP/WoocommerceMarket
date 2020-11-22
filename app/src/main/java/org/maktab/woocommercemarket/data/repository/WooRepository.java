@@ -76,12 +76,10 @@ public class WooRepository {
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getMostPointsOptions());
         startRespondEnqueue(mListMostPoints,call);
     }
-
     public void fetchMostPointItems(MutableLiveData<List<Product>> liveData,int page){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getMostPointsOptions(page));
         startRespondEnqueue(liveData, call);
     }
-
     public void fetchTopSales(){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getPopularOptions());
         startRespondEnqueue(mListTopSales,call);
@@ -90,16 +88,15 @@ public class WooRepository {
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getPopularOptions(page));
         startRespondEnqueue(liveData, call);
     }
-
     public void fetchNewestItems(){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getNewestOptions());
         startRespondEnqueue(mListNewest,call);
     }
+
     public void fetchNewestItems(MutableLiveData<List<Product>> liveData,int page){
         Call<List<Product>> call = mWooService.listItems(NetworkParams.getNewestOptions(page));
         startRespondEnqueue(liveData, call);
     }
-
     private void startRespondEnqueue(MutableLiveData<List<Product>> liveData, Call<List<Product>> call) {
         Log.d("Tag","response started");
         call.enqueue(new Callback<List<Product>>() {

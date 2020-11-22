@@ -55,6 +55,8 @@ public class ProductListMoreViewModel extends ProductListViewModel {
         return mProductLiveData.getValue().get(position);
     }
 
+
+
     public int getFirstNewItemPosition() {
         if(mProductLiveData.getValue().size() == 0){
             return 0;
