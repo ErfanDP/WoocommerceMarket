@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import org.maktab.woocommercemarket.R;
 import org.maktab.woocommercemarket.viewModel.CategoriesViewModel;
 
-public class CategoriesFragment extends Fragment {
+public class ChartFragment extends Fragment {
 
     private CategoriesViewModel mViewModel;
 
-    public static CategoriesFragment newInstance() {
-        return new CategoriesFragment();
+    public static ChartFragment newInstance() {
+        return new ChartFragment();
     }
 
     @Override

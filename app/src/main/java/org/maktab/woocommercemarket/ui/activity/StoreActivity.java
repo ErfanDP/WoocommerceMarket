@@ -1,16 +1,10 @@
 package org.maktab.woocommercemarket.ui.activity;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.ActivityNavigator;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
@@ -19,21 +13,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.maktab.woocommercemarket.R;
 import org.maktab.woocommercemarket.data.model.ListsType;
 import org.maktab.woocommercemarket.data.model.Product;
-import org.maktab.woocommercemarket.ui.fragmnet.CategoriesFragment;
-import org.maktab.woocommercemarket.ui.fragmnet.ProductInfoFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListMoreFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListMoreFragmentDirections;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragment;
 import org.maktab.woocommercemarket.ui.fragmnet.ProductListsFragmentDirections;
 
-public class MainActivity extends AppCompatActivity implements ProductListsFragment.FragmentCallBacks
+public class StoreActivity extends AppCompatActivity implements ProductListsFragment.FragmentCallBacks
         , ProductListMoreFragment.FragmentMoreCallBacks {
     private NavController mNavController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_store);
         navigationInit();
     }
 

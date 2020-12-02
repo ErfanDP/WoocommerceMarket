@@ -6,8 +6,8 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
     \<item
-        android:id="@+id/categoriesFragment"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:id="@+id/chartFragment"
+        android:icon="@drawable/ic_action_shopping_chart"
         android:title="@string/title_categories" />
 
 

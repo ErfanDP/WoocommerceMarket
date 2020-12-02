@@ -37,12 +37,12 @@
             app:argType="org.maktab.woocommercemarket.data.model.ListsType" />
     </fragment>
     <fragment
-        android:id="@+id/categoriesFragment"
-        android:name="org.maktab.woocommercemarket.ui.fragmnet.CategoriesFragment"
+        android:id="@+id/chartFragment"
+        android:name="org.maktab.woocommercemarket.ui.fragmnet.ChartFragment"
         android:label="categories_fragment"
         tools:layout="@layout/categories_fragment" >
         <action
-            android:id="@+id/action_categoriesFragment_to_productInfoFragment"
+            android:id="@+id/action_chartFragment_to_productInfoFragment"
             app:destination="@id/productInfoFragment" />
     </fragment>
     <action
@@ -50,5 +50,5 @@
         app:destination="@id/productListsFragment" />
     <action
         android:id="@+id/action_global_categoriesFragment"
-        app:destination="@id/categoriesFragment" />
+        app:destination="@id/chartFragment" />
 </navigation>

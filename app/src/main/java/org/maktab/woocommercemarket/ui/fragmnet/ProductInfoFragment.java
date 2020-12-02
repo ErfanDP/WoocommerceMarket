@@ -7,12 +7,14 @@ import android.view.ViewGroup;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.maktab.woocommercemarket.R;
 import org.maktab.woocommercemarket.adapters.SliderAdapter;
 import org.maktab.woocommercemarket.data.model.Product;
 import org.maktab.woocommercemarket.databinding.FragmentProductInfoBinding;
+import org.maktab.woocommercemarket.utils.ChartPreferences;
 import org.maktab.woocommercemarket.viewModel.ProductInfoViewModel;
 
 /**
@@ -24,7 +26,6 @@ public class ProductInfoFragment extends Fragment {
 
     private static final String ARG_PRODUCT = "product_arg";
 
-    private Product mProduct;
     private FragmentProductInfoBinding mBinding;
     private ProductInfoViewModel mViewModel;
 
@@ -42,24 +43,42 @@ public class ProductInfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ProductInfoViewModel.class);
         if (getArguments() != null) {
-            mProduct = (Product) getArguments().getSerializable(ARG_PRODUCT);
+            Product product = (Product) getArguments().getSerializable(ARG_PRODUCT);
+            mViewModel.setProduct(product);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mBinding =DataBindingUtil.inflate(inflater,R.layout.fragment_product_info
-        ,container,false);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_product_info
+                , container, false);
         initViews();
+        initObservers();
         return mBinding.getRoot();
     }
 
+    private void initObservers() {
+        mViewModel.getIsAddedToChart().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                changeAddToChartVisibility(aBoolean);
+            }
+        });
+    }
+
+    private void changeAddToChartVisibility(Boolean aBoolean) {
+        if (aBoolean)
+            mBinding.buttonAddToChart.setVisibility(View.GONE);
+        else
+            mBinding.buttonAddToChart.setVisibility(View.VISIBLE);
+    }
+
     private void initViews() {
-        mBinding.imageSlider.setSliderAdapter(new SliderAdapter(getContext(),mProduct.getImages()));
-        mBinding.productInfoDescription.setText(mViewModel.deserializeHtml(mProduct.getDescription()));
-        mBinding.productInfoName.setText(mProduct.getName());
-        mBinding.productInfoPrice.setText(mProduct.getPrice());
+        mBinding.setViewModel(mViewModel);
+        changeAddToChartVisibility(ChartPreferences
+                .isInChart(this.getContext(),String.valueOf(mViewModel.getProduct().getId())));
+        mBinding.imageSlider.setSliderAdapter(new SliderAdapter(getContext(), mViewModel.getProduct().getImages()));
     }
 
 

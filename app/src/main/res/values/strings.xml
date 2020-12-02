@@ -11,5 +11,6 @@
     <string name="product_image">Product Image</string>
     <string name="top_sales">Top Sales</string>
     <string name="mostpoints">MostPoints</string>
+    <string name="add_to_chart">Add to Chart</string>
 
 </resources>

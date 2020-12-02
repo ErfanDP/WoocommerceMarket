@@ -1,6 +1,5 @@
 package org.maktab.woocommercemarket.data.remote.retrofit;
 
-import org.maktab.woocommercemarket.data.model.Category;
 import org.maktab.woocommercemarket.data.model.Product;
 
 import java.util.List;
